@@ -268,7 +268,39 @@
                 </configuration>
             </plugin>
         </plugins>
+        <extensions>
+			<!-- Extensión para utilizar las librerías de mvn universales --> 
+			<extension> 
+				<groupId>org.springframework.build</groupId> 
+				<artifactId>aws-maven</artifactId> 
+				<version>5.0.0.RELEASE</version> 
+			</extension> 
+        </extensions>      
     </build>
+
+         <distributionManagement>
+                  <snapshotRepository>
+                           <id>mvnrepository.universales.com</id>
+                           <url>s3://mvnrepository.universales.com/snapshot</url>
+                  </snapshotRepository>
+                  <repository>
+                           <id>mvnrepository.universales.com</id>
+                           <url>s3://mvnrepository.universales.com/release</url>
+                  </repository>
+         </distributionManagement>
+         <repositories>
+                  <repository>
+                           <id>mvnrepository.universales.com</id>
+                           <url>s3://mvnrepository.universales.com/release</url>
+                  </repository>
+                  <repository>
+                           <id>snapshot.mvnrepository.universales.com</id>
+                           <url>s3://mvnrepository.universales.com/snapshot</url>
+                  </repository>
+</repositories>     
+         
+         
+         
     <reporting>
         <plugins>
             <plugin>
