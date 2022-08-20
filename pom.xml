@@ -36,6 +36,10 @@
             <name>jaspersoft-releases</name>
             <url>https://jaspersoft.jfrog.io/jaspersoft/jrs-ce-releases</url>
         </repository>
+	<repository>
+                           <id>mvnrepository.universales.com</id>
+                           <url>s3://mvnrepository.universales.com/release</url>
+                  </repository>    
     </repositories>
 
     <dependencies>
@@ -279,27 +283,11 @@
     </build>
 
          <distributionManagement>
-                  <snapshotRepository>
-                           <id>mvnrepository.universales.com</id>
-                           <url>s3://mvnrepository.universales.com/snapshot</url>
-                  </snapshotRepository>
                   <repository>
                            <id>mvnrepository.universales.com</id>
                            <url>s3://mvnrepository.universales.com/release</url>
                   </repository>
          </distributionManagement>
-         <repositories>
-                  <repository>
-                           <id>mvnrepository.universales.com</id>
-                           <url>s3://mvnrepository.universales.com/release</url>
-                  </repository>
-                  <repository>
-                           <id>snapshot.mvnrepository.universales.com</id>
-                           <url>s3://mvnrepository.universales.com/snapshot</url>
-                  </repository>
-</repositories>     
-         
-         
          
     <reporting>
         <plugins>
