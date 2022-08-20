@@ -34,7 +34,8 @@
         <repository>
             <id>central</id>
             <name>jaspersoft-releases</name>
-            <url>https://jaspersoft.jfrog.io/jaspersoft/jrs-ce-releases</url>
+            <!--<url>https://jaspersoft.jfrog.io/jaspersoft/jrs-ce-releases</url>-->
+		<url>https://jaspersoft.jfrog.io/ui/native/jaspersoft-clients-releases</url>
         </repository>
 	    <repository>
 			<id>maven central</id>
