@@ -26,10 +26,6 @@
     </scm>
 
     <repositories>
-	<repository>
-			<id>maven central</id>
-			<url>https://repo1.maven.org/maven2/</url>
-		</repository>    
         <repository>
             <id>jaspersoft-clients-snapshots</id>
             <name>Jaspersoft clients snapshots</name>
@@ -40,6 +36,10 @@
             <name>jaspersoft-releases</name>
             <url>https://jaspersoft.jfrog.io/jaspersoft/jrs-ce-releases</url>
         </repository>
+	    <repository>
+			<id>maven central</id>
+			<url>https://repo1.maven.org/maven2/</url>
+		</repository>    
 	<repository>
                            <id>mvnrepository.universales.com</id>
                            <url>s3://mvnrepository.universales.com/release</url>
