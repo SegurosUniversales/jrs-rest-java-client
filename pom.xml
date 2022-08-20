@@ -29,13 +29,13 @@
         <repository>
             <id>jaspersoft-clients-snapshots</id>
             <name>Jaspersoft clients snapshots</name>
-            <url>https://jaspersoft.jfrog.io/jaspersoft/jaspersoft-clients-releases</url>
+            <url>https://jaspersoft.jfrog.io/ui/native/jaspersoft-clients-releases</url>
         </repository>
         <repository>
             <id>central</id>
             <name>jaspersoft-releases</name>
             <!--<url>https://jaspersoft.jfrog.io/jaspersoft/jrs-ce-releases</url>-->
-		<url>https://jaspersoft.jfrog.io/ui/native/jaspersoft-clients-releases</url>
+		<url>https://jaspersoft.jfrog.io/ui/native/jrs-ce-releases</url>
         </repository>
 	    <repository>
 			<id>maven central</id>
