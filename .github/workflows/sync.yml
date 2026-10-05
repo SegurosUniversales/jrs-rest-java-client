@@ -1,0 +1,85 @@
+name: Merge master into develop
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+# Prevent two executions from updating develop at the same time.
+concurrency:
+  group: merge-master-into-develop
+  cancel-in-progress: false
+
+# The workflow uses a GitHub App installation token for the write operation.
+# GITHUB_TOKEN only needs read access.
+permissions:
+  contents: read
+
+jobs:
+  merge-master-into-develop:
+    name: Merge master into develop
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Check out develop
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: develop
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Merge master, preferring master in conflicts
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "master-to-develop[bot]"
+          git config user.email "master-to-develop[bot]@users.noreply.github.com"
+
+          # Update both remote references, while keeping develop checked out.
+          git fetch --no-tags origin \
+            +refs/heads/master:refs/remotes/origin/master \
+            +refs/heads/develop:refs/remotes/origin/develop
+          git reset --hard origin/develop
+
+          # On develop, "theirs" is master. -X theirs resolves conflicting
+          # content hunks in favor of master while preserving non-conflicting
+          # changes from both branches.
+          if ! git merge --no-ff --no-edit -X theirs origin/master; then
+            # Continue only when Git actually left an in-progress merge.
+            if ! git rev-parse --verify --quiet MERGE_HEAD >/dev/null; then
+              echo "The merge failed before creating a merge state." >&2
+              exit 1
+            fi
+
+            # Resolve conflict types not handled by -X theirs. If a path exists
+            # in master (stage 3), use that version; otherwise master deleted it.
+            while IFS= read -r -d '' path; do
+              if git ls-files --unmerged -- "$path" | awk '$3 == 3 { found = 1 } END { exit !found }'; then
+                git checkout --theirs -- "$path"
+                git add -- "$path"
+              else
+                git rm --ignore-unmatch -- "$path"
+              fi
+            done < <(git diff --name-only --diff-filter=U -z)
+
+            unresolved_conflicts="$(git diff --name-only --diff-filter=U)"
+            if [[ -n "$unresolved_conflicts" ]]; then
+              echo "Some merge conflicts could not be resolved automatically." >&2
+              printf '%s\n' "$unresolved_conflicts" >&2
+              exit 1
+            fi
+
+            git commit --no-edit
+          fi
+
+          # Explicit destination: this command can update develop only.
+          git push origin HEAD:refs/heads/develop
